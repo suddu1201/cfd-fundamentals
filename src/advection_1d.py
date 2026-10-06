@@ -24,3 +24,20 @@ def gaussian(x, x0=0.3, sigma=0.05, amplitude=1.0):
 def exact_shift(u0_func, x, c, t, L):
     x_shifted = (x - c * t) % L
     return u0_func(x_shifted)
+
+def central_advection(u0, c, dx, dt, nsteps):
+    """Forward-time, central-space (FTCS)."""
+    u = u0.copy()
+    C = c * dt / dx
+    for _ in range(nsteps):
+        u = u - (C / 2) * (np.roll(u, -1) - np.roll(u, 1))
+    return u
+
+def lax_wendroff_advection(u0, c, dx, dt, nsteps):
+    u = u0.copy()
+    C = c * dt / dx
+    assert C <= 1.0, f"CFL violated: C={C:.3f}"
+    for _ in range(nsteps):
+        up, um = np.roll(u, -1), np.roll(u, 1)
+        u = u - (C / 2) * (up - um) + (C**2 / 2) * (up - 2 * u + um)
+    return u
