@@ -8,20 +8,23 @@ dx = x[1] - x[0]
 c = 1.0
 t_final = 0.3
 
-Cs = [0.1, 0.25, 0.5, 0.75, 1.0]
+Cs = [0.95, 1.05]
 
-fig, ax = plt.subplots()
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 u0 = square_wave(x)
-ax.plot(x, u0, "k--", alpha=0.3, label="initial")
 
-for C in Cs:
+for ax, C in zip(axes, Cs):
     dt = C * dx / c
     nsteps = round(t_final / dt)
-    u_num = upwind_advection(u0, c, dx, dt, nsteps)
-    ax.plot(x, u_num, label=f"C={C}")
+    u_num = upwind_advection(u0, c, dx, dt, nsteps, check_cfl=False)
+    u_exact = exact_shift(square_wave, x, c, nsteps * dt, L)
 
-u_exact = exact_shift(square_wave, x, c, nsteps * dt, L)
-ax.plot(x, u_exact, "g-", lw=2, label="exact (last C's time)")
-ax.legend()
-ax.set_title("Upwind: effect of Courant number on numerical diffusion")
-plt.savefig("cfl_sweep.png", dpi=120)
+    ax.plot(x, u0, "k--", alpha=0.3, label="initial")
+    ax.plot(x, u_exact, "g-", lw=2, label="exact")
+    ax.plot(x, u_num, "o-", markersize=2, label=f"upwind, C={C}")
+    ax.set_title(f"Upwind, C = {C}, {nsteps} steps")
+    ax.legend()
+    print(f"C = {C}   steps = {nsteps}   max|u| = {np.max(np.abs(u_num)):.3e}")
+
+plt.tight_layout()
+plt.savefig("results/cfl_sweep.png", dpi=120)

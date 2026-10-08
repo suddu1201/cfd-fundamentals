@@ -1,10 +1,11 @@
 import numpy as np
 
-def upwind_advection(u0, c, dx, dt, nsteps, periodic=True):
+def upwind_advection(u0, c, dx, dt, nsteps, periodic=True, check_cfl=True):
     """First-order upwind for u_t + c u_x = 0."""
     u = u0.copy()
     C = c * dt / dx
-    assert C <= 1.0, f"CFL violated: C={C:.3f}"
+    if check_cfl:
+        assert C <= 1.0, f"CFL violated: C={C:.3f}"
     for _ in range(nsteps):
         if periodic:
             u_upwind = np.roll(u, 1)
