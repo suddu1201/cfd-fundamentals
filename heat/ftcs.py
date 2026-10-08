@@ -50,3 +50,22 @@ plt.savefig("results/heat_runA.png", dpi=150)
 # TODO: Run B, the stability test
 # Initial condition: a hat or step (e.g. u0 = 1 for 0.4 < x < 0.6, else 0)
 # Run d = 0.49 and d = 0.51 for the same physical time. Plot side by side.
+u0 = np.where((x > 0.4) & (x < 0.6), 1.0, 0.0)
+d_values = [0.49, 0.51]
+steps = [0, 50, 200, 500]
+colors = ["C0", "C1", "C2", "C3"]
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+for ax, d in zip(axes, d_values):
+    for step, c in zip(steps, colors):
+        u_num = solve(u0, d, step)
+        print(f"max = {np.max(np.abs(u_num))}")
+        ax.plot(x, u_num, "o-", color=c, markersize=3, label=f"step {step}")
+    
+    ax.set_title(f"FTCS, d = {d}")
+    ax.set_xlabel("x")
+    ax.set_ylabel("u")
+    ax.legend()
+
+plt.tight_layout()
+plt.savefig("results/heat_runB.png", dpi=150)
