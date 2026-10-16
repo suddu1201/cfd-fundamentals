@@ -1,18 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-def ftcs_step(u, d):
-    """Advance one timestep. Boundary values stay fixed."""
-    u_new = u.copy()
-    # update the interior points u_new[1:-1] in one line using slicing (no loop)
-    u_new[1:-1] = u[1:-1] + d*(u[2:] - 2*u[1:-1] + u[:-2])
-    return u_new
-
-def solve(u0, d, n_steps):
-    u = u0.copy()
-    for _ in range(n_steps):
-        u = ftcs_step(u, d)
-    return u
+from src.diffusion_1d import ftcs_step, solve
 
 N = 51
 x = np.linspace(0, 1, N)
@@ -32,7 +20,7 @@ for t_target, c in zip(times, colors):
     n_steps = round(t_target / dt)
     t_actual = n_steps * dt
 
-    u_num = solve(u0, d, n_steps)
+    u_num = solve(ftcs_step, u0, d, n_steps)
     u_exact = np.exp(-alpha * np.pi**2 * t_actual) * np.sin(np.pi * x)
     err = np.max(np.abs(u_num - u_exact))
     print(f"t = {t_actual:.4f}   steps = {n_steps:4d}   max error = {err:.3e}")
@@ -58,7 +46,7 @@ colors = ["C0", "C1", "C2", "C3"]
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 for ax, d in zip(axes, d_values):
     for step, c in zip(steps, colors):
-        u_num = solve(u0, d, step)
+        u_num = solve(ftcs_step, u0, d, step)
         print(f"max = {np.max(np.abs(u_num))}")
         ax.plot(x, u_num, "o-", color=c, markersize=3, label=f"step {step}")
     

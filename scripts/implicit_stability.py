@@ -1,12 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from src.diffusion_1d import ftcs_step, backward_euler_step, crank_nicolson_step
+from src.diffusion_1d import ftcs_step, backward_euler_step, crank_nicolson_step, solve
 
-def solve(step, u0, d, n_steps):
-    u = u0.copy()
-    for _ in range(n_steps):
-        u = step(u, d)
-    return u
 
 N = 51
 x = np.linspace(0, 1, N)

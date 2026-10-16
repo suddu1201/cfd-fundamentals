@@ -34,4 +34,4 @@ for row, (ic_name, ic) in enumerate(initial_conditions):
 
 fig.suptitle(f"Scheme comparison at C={C}, t={nsteps * dt:.2f}")
 fig.tight_layout()
-plt.savefig("scheme_comparison.png", dpi=120)
+plt.savefig("results/scheme_comparison.png", dpi=120)

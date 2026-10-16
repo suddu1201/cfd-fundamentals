@@ -1,12 +1,22 @@
+"""Linear-algebra helpers: tridiagonal solver."""
+
 import numpy as np
 
 def thomas(a, b, c, r):
-    """Solve a tridiagonal system A x = r.
-    a: sub-diagonal (length n, a[0] unused)
-    b: main diagonal (length n)
-    c: super-diagonal (length n, c[-1] unused)
-    r: right-hand side (length n)
+    """Solve a tridiagonal system A x = r with the Thomas algorithm.
+
+    Gaussian elimination specialised to tridiagonal matrices: O(n) work and
+    memory instead of O(n^3) for a dense solve. No pivoting, so A should be
+    diagonally dominant (|b_i| >= |a_i| + |c_i|), which the implicit
+    diffusion matrices always are.
+
+    a : sub-diagonal, length n (a[0] unused)
+    b : main diagonal, length n
+    c : super-diagonal, length n (c[-1] unused)
+    r : right-hand side, length n
+    Returns x, length n.
     """
+    
     n = len(b)
     cp = np.zeros(n)
     rp = np.zeros(n)

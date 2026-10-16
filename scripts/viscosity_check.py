@@ -30,4 +30,4 @@ for C in Cs:
 plt.plot(Cs, D_theory, "g-", label="theory: (c·dx/2)(1−C)")
 plt.plot(Cs, D_meas, "ro", label="measured")
 plt.xlabel("C"); plt.ylabel("D"); plt.legend()
-plt.savefig("viscosity_check.png", dpi=120)
+plt.savefig("results/viscosity_check.png", dpi=120)

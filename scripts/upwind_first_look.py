@@ -22,5 +22,5 @@ for name, ic_func in [("square", square_wave), ("gaussian", gaussian)]:
     plt.plot(x, u_num, "r.-", label=f"upwind, C={C_courant}")
     plt.title(f"{name} advection, t={nsteps*dt:.2f}")
     plt.legend()
-    plt.savefig(f"advection_{name}.png", dpi=120)
+    plt.savefig(f"results/advection_{name}.png", dpi=120)
     print(f"saved advection_{name}.png")
